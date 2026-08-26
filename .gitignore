@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.venv/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# The full dataset is reproducible but exceeds GitHub's 100 MB single-file limit.
+data/synthetic_ecg_dataset.npy
+
+# Local downloads of third-party MIT-BIH data are not redistributed.
+data/mitdb_subset/

@@ -1,0 +1,2 @@
+test,df_between,df_within,f_statistic,p_value,alpha,significant,method
+one_way_anova,1.0,8.0,2.201259928239782,0.17618985422179628,0.05,False,scipy.stats.f_oneway

@@ -1,0 +1,26 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+The synthetic ECG dataset and its included sample subset are licensed under
+the Creative Commons Attribution 4.0 International License.
+
+You are free to share and adapt the dataset for any purpose, including
+commercial use, provided that you give appropriate credit, provide a link to
+the license, and indicate whether changes were made.
+
+License text and terms:
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+ATTRIBUTION REQUIREMENT
+
+If you use this dataset, you MUST cite the following article:
+
+"Towards Trustworthy Artificial Intelligence in Biomedical Decision Support:
+A Digital-Twin-Style Framework for Synthetic ECG Classification."
+
+The article is currently under review / in manuscript preparation. Complete
+the journal, volume, issue, and DOI fields after publication using the citation
+metadata in CITATION.cff.
+
+This data license does not apply to third-party data. MIT-BIH records are not
+redistributed in this repository; the external-validation code downloads them
+from PhysioNet under the terms specified by the original provider.

@@ -1,0 +1,33 @@
+{
+  "train_records": [
+    "106",
+    "200",
+    "203",
+    "208"
+  ],
+  "test_records": [
+    "100",
+    "101",
+    "103",
+    "105",
+    "109",
+    "118",
+    "119",
+    "207"
+  ],
+  "train_class_counts": [
+    18,
+    14,
+    30,
+    185
+  ],
+  "test_class_counts": [
+    232,
+    8,
+    21,
+    65
+  ],
+  "epochs": 60,
+  "trainable_component": "classifier_only",
+  "seed": 42
+}

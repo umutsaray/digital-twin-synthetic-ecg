@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this software or dataset, please cite the article below."
+title: "Digital-Twin-Style Synthetic ECG Classification and Trustworthy-AI Evaluation Code and Dataset"
+type: software
+authors:
+  - family-names: "TODO"
+    given-names: "AUTHOR NAME"
+    affiliation: "TBD"
+repository-code: "https://github.com/umutsaray/digital-twin-synthetic-ecg"
+license: MIT
+date-released: 2026-08-27
+
+# TODO after publication: replace the author placeholder and fill in journal,
+# volume, issue, year, pages, and DOI. Do not invent publication metadata.
+preferred-citation:
+  type: article
+  title: "Towards Trustworthy Artificial Intelligence in Biomedical Decision Support: A Digital-Twin-Style Framework for Synthetic ECG Classification"
+  authors:
+    - family-names: "TODO"
+      given-names: "AUTHOR NAME"
+      affiliation: "TBD"
+  journal: "TBD"
+  year: 2026
+  volume: "TBD"
+  issue: "TBD"
+  pages: "TBD"
+  doi: "TBD"
