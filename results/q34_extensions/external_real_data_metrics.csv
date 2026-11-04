@@ -1,2 +1,2 @@
 dataset,n_segments,mapped_classes,zero_shot_accuracy,zero_shot_macro_f1_4class,noise_or_fault_prediction_rate,recall_normal_sinus_rhythm,recall_bradycardia,recall_tachycardia,recall_arrhythmia
-MIT-BIH Arrhythmia Database,573,4,0.19197207678883071,0.16025222874537942,0.5357766143106457,0.0,0.13636363636363635,0.0,0.428
+MIT-BIH Arrhythmia Database,573,4,0.14485165794066318,0.1274730021598272,0.6230366492146597,0.0,0.09090909090909091,0.0,0.324

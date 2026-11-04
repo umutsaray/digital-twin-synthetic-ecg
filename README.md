@@ -41,6 +41,20 @@ the full dataset locally. No Zenodo or other external archive is used.
 
 See [`data/README.md`](data/README.md) for exact files and licensing details.
 
+### Ectopic RR sequencing correction
+
+Version 1.0.1 corrects the arrhythmia beat-timing sequence: the short coupling
+interval now leads into the beat labelled `ectopic`, and the compensatory pause
+is applied to the separate following interval. Across 2,809 complete ectopic
+events, the mean RR intervals before and after ectopic beats were 0.4361 s and
+1.0432 s, respectively, versus a mean within-record median RR of 0.7397 s.
+
+Only the 2,000 arrhythmia records were regenerated; hash checks confirmed that
+the other five classes were unchanged. All models and downstream analyses were
+then rerun. See [`ECTOPIC_FIX_BEFORE_AFTER.md`](ECTOPIC_FIX_BEFORE_AFTER.md) for
+the table-level changes and `results/ectopic_rr_before_after.png` for the
+verification figure.
+
 ## Installation
 
 Python 3.12.13 was used for the manuscript analyses.

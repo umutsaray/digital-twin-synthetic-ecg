@@ -1,7 +1,7 @@
 ,normal_sinus_rhythm,bradycardia,tachycardia,arrhythmia,noisy_ecg,sensor_fault_ecg
-normal_sinus_rhythm,296,0,0,3,0,1
-bradycardia,1,299,0,0,0,0
+normal_sinus_rhythm,291,0,0,4,1,4
+bradycardia,0,298,0,2,0,0
 tachycardia,0,0,300,0,0,0
-arrhythmia,6,3,0,284,4,3
-noisy_ecg,2,0,0,4,286,8
-sensor_fault_ecg,18,1,0,7,32,242
+arrhythmia,4,4,3,282,2,5
+noisy_ecg,1,0,0,8,276,15
+sensor_fault_ecg,9,0,0,9,26,256

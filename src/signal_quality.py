@@ -63,12 +63,12 @@ def _plot_quality_metric(
         patch.set_facecolor(color)
         patch.set_alpha(0.75)
     ax.set_xticks(np.arange(1, len(class_names) + 1))
-    ax.set_xticklabels([name.replace("_", "\n") for name in class_names], fontsize=8)
+    ax.set_xticklabels([name.replace("_", "\n") for name in class_names], fontsize=10)
     ax.set_ylabel(ylabel)
     ax.set_title(f"{ylabel} by class")
     ax.grid(axis="y", alpha=0.25)
     fig.tight_layout()
-    fig.savefig(output_path, dpi=180)
+    fig.savefig(output_path, dpi=300)
     plt.close(fig)
 
 

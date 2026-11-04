@@ -9,9 +9,12 @@ authors:
 repository-code: "https://github.com/umutsaray/digital-twin-synthetic-ecg"
 license: MIT
 date-released: 2026-08-27
+version: "1.0.1"
 
 # TODO after publication: replace the author placeholder and fill in journal,
 # volume, issue, year, pages, and DOI. Do not invent publication metadata.
+# Version 1.0.1 contains the corrected ectopic-coupling/compensatory-pause
+# sequencing and the fully regenerated downstream results.
 preferred-citation:
   type: article
   title: "Towards Trustworthy Artificial Intelligence in Biomedical Decision Support: A Digital-Twin-Style Framework for Synthetic ECG Classification"

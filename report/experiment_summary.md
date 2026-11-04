@@ -29,10 +29,10 @@ Synthetic ECG segments are generated from Gaussian PQRST morphology with class-s
 
 | model | accuracy | precision_macro | recall_macro | f1_macro | roc_auc_ovr_macro | best_epoch | stopped_epoch | early_stopped | train_time_sec | parameters |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| cnn1d | 0.9900 | 0.9902 | 0.9900 | 0.9900 | 0.9999 | 13 | 23 | True | 46.0045 | 33606 |
-| lstm | 0.5606 | 0.5754 | 0.5606 | 0.5489 | 0.8549 | 23 | 33 | True | 270.8972 | 9350 |
-| cnn_lstm | 0.9850 | 0.9852 | 0.9850 | 0.9849 | 0.9995 | 27 | 37 | True | 110.6042 | 29878 |
-| transformer | 0.9739 | 0.9747 | 0.9739 | 0.9739 | 0.9991 | 35 | 45 | True | 674.7928 | 21894 |
+| cnn1d | 0.9978 | 0.9978 | 0.9978 | 0.9978 | 1.0000 | 39 | 49 | True | 86.3457 | 33606 |
+| lstm | 0.6994 | 0.7010 | 0.6994 | 0.6983 | 0.9324 | 48 | 50 | False | 256.5015 | 9350 |
+| cnn_lstm | 0.9950 | 0.9950 | 0.9950 | 0.9950 | 0.9999 | 39 | 49 | True | 126.4174 | 29878 |
+| transformer | 0.9800 | 0.9802 | 0.9800 | 0.9800 | 0.9988 | 43 | 50 | False | 577.9035 | 21894 |
 
 ## Best Holdout Model
 
@@ -42,26 +42,26 @@ Synthetic ECG segments are generated from Gaussian PQRST morphology with class-s
 
 | model | display_name | n_folds | accuracy_mean | accuracy_std | precision_macro_mean | precision_macro_std | recall_macro_mean | recall_macro_std | f1_macro_mean | f1_macro_std | roc_auc_ovr_macro_mean | roc_auc_ovr_macro_std |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| cnn1d | 1D-CNN | 5 | 0.9948 | 0.0030 | 0.9948 | 0.0030 | 0.9948 | 0.0030 | 0.9947 | 0.0030 | 0.9998 | 0.0001 |
-| cnn_lstm | CNN-LSTM | 5 | 0.9913 | 0.0041 | 0.9914 | 0.0041 | 0.9913 | 0.0041 | 0.9913 | 0.0041 | 0.9997 | 0.0002 |
+| cnn1d | 1D-CNN | 5 | 0.9950 | 0.0029 | 0.9950 | 0.0028 | 0.9950 | 0.0029 | 0.9950 | 0.0029 | 0.9998 | 0.0002 |
+| cnn_lstm | CNN-LSTM | 5 | 0.9926 | 0.0031 | 0.9926 | 0.0031 | 0.9926 | 0.0031 | 0.9926 | 0.0031 | 0.9996 | 0.0002 |
 
 - Fold-level rows: `10`
 
 ## Statistical Significance
 
-One-way ANOVA did not find a significant difference in macro F1 across models (p=0.1762).
+One-way ANOVA did not find a significant difference in macro F1 across models (p=0.2376).
 
 ### ANOVA
 
 | test | df_between | df_within | f_statistic | p_value | alpha | significant | method |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| one_way_anova | 1.0000 | 8.0000 | 2.2013 | 0.1762 | 0.0500 | False | scipy.stats.f_oneway |
+| one_way_anova | 1.0000 | 8.0000 | 1.6291 | 0.2376 | 0.0500 | False | scipy.stats.f_oneway |
 
 ### Tukey HSD
 
 | group1 | group2 | mean_diff | p_adj | lower | upper | reject | method |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| cnn1d | cnn_lstm | -0.0034 | 0.1762 | -0.0087 | 0.0019 | False | statsmodels.pairwise_tukeyhsd |
+| cnn1d | cnn_lstm | -0.0024 | 0.2376 | -0.0068 | 0.0020 | False | statsmodels.pairwise_tukeyhsd |
 
 ## Signal Quality Validation
 
@@ -69,7 +69,7 @@ SNR, PRD, and RMSE are computed per segment by comparing the final generated ECG
 
 | label | snr_db_mean | snr_db_std | prd_percent_mean | prd_percent_std | rmse_mean | rmse_std |
 | --- | --- | --- | --- | --- | --- | --- |
-| arrhythmia | 13.4160 | 3.1254 | 22.6905 | 7.6823 | 0.0496 | 0.0152 |
+| arrhythmia | 13.5512 | 3.1477 | 22.3635 | 7.6697 | 0.0497 | 0.0154 |
 | bradycardia | 14.2675 | 3.1838 | 20.6359 | 7.2431 | 0.0372 | 0.0123 |
 | noisy_ecg | 2.0602 | 2.3904 | 81.8974 | 22.5600 | 0.1779 | 0.0323 |
 | normal_sinus_rhythm | 16.3697 | 3.1303 | 16.1647 | 5.5786 | 0.0354 | 0.0115 |

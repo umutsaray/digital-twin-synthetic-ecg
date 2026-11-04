@@ -109,11 +109,11 @@ def save_confusion_matrix(
                 ha="center",
                 va="center",
                 color="white" if matrix[i, j] > threshold else "black",
-                fontsize=8,
+                fontsize=10,
             )
     fig.tight_layout()
     png_path = output_dir / f"{model_name}_confusion_matrix.png"
-    fig.savefig(png_path, dpi=180)
+    fig.savefig(png_path, dpi=300)
     plt.close(fig)
     return png_path
 
@@ -147,7 +147,7 @@ def plot_training_curves(history: Dict[str, Iterable[float]], output_dir: str | 
     fig.suptitle(f"{model_name} training curves")
     fig.tight_layout()
     output_path = output_dir / f"{model_name}_training_curves.png"
-    fig.savefig(output_path, dpi=180)
+    fig.savefig(output_path, dpi=300)
     plt.close(fig)
     return output_path
 

@@ -171,29 +171,38 @@ def _generate_beat_train(
     t = rng.uniform(0.35, min(1.05, base_rr + 0.35))
     beat_times: List[float] = []
     beat_kinds: List[str] = []
-    compensatory_pause = False
+    next_beat_kind = "normal"
+    pause_pending = False
 
     while t < duration + 0.7:
-        beat_kind = "normal"
+        beat_kind = next_beat_kind
+        next_beat_kind = "normal"
+        beat_times.append(float(t))
+        beat_kinds.append(beat_kind)
+
         rr_scale = 1.0 + rng.normal(0.0, hrv)
 
         if irregular:
-            event = rng.random()
-            if event < 0.14:
-                rr_scale *= rng.uniform(0.45, 0.72)
-                beat_kind = "ectopic"
-                compensatory_pause = True
-            elif event < 0.22:
-                rr_scale *= rng.uniform(1.35, 1.85)
-            elif event < 0.30:
-                rr_scale *= rng.uniform(0.72, 1.35)
-
-            if compensatory_pause and beat_times:
+            if pause_pending:
+                # This is the interval *after* an ectopic beat.  Consume the
+                # pause exactly one iteration after the short coupling
+                # interval that led into the ectopic beat.
                 rr_scale *= rng.uniform(1.20, 1.65)
-                compensatory_pause = False
+                pause_pending = False
+            else:
+                # Decide the type of the upcoming beat.  Any short coupling
+                # interval therefore ends at the beat labelled "ectopic",
+                # rather than incorrectly starting at it.
+                event = rng.random()
+                if event < 0.14:
+                    rr_scale *= rng.uniform(0.45, 0.72)
+                    next_beat_kind = "ectopic"
+                    pause_pending = True
+                elif event < 0.22:
+                    rr_scale *= rng.uniform(1.35, 1.85)
+                elif event < 0.30:
+                    rr_scale *= rng.uniform(0.72, 1.35)
 
-        beat_times.append(float(t))
-        beat_kinds.append(beat_kind)
         rr = np.clip(base_rr * rr_scale, 0.30, 2.20)
         t += float(rr)
 
@@ -486,12 +495,12 @@ def _plot_example_signals(
     for class_id, class_name in enumerate(class_names):
         idx = int(np.flatnonzero(labels == class_id)[0])
         axes[class_id].plot(t, data[idx], linewidth=0.9, color="#1f77b4")
-        axes[class_id].set_ylabel(class_name.replace("_", "\n"), fontsize=8)
+        axes[class_id].set_ylabel(class_name.replace("_", "\n"), fontsize=10)
         axes[class_id].grid(alpha=0.25)
     axes[-1].set_xlabel("Time (seconds)")
     fig.suptitle("Synthetic ECG examples by class", y=0.995)
     fig.tight_layout()
-    fig.savefig(figures_dir / "example_signals.png", dpi=180)
+    fig.savefig(figures_dir / "example_signals.png", dpi=300)
     plt.close(fig)
 
 
@@ -505,7 +514,7 @@ def _plot_class_distribution(labels: np.ndarray, class_names: List[str], figures
     ax.set_title("Class distribution")
     ax.grid(axis="y", alpha=0.25)
     fig.tight_layout()
-    fig.savefig(figures_dir / "class_distribution.png", dpi=180)
+    fig.savefig(figures_dir / "class_distribution.png", dpi=300)
     plt.close(fig)
 
 

@@ -107,17 +107,17 @@ def save_cnn_explainability_examples(
             origin="lower",
         )
         ax.plot(t, signal, color="#0f172a", linewidth=0.9)
-        ax.set_ylabel(class_names[label_int].replace("_", "\n"), fontsize=8)
+        ax.set_ylabel(class_names[label_int].replace("_", "\n"), fontsize=10)
         ax.set_title(
             f"{title_kind}: true {class_names[label_int]} / predicted {class_names[prediction]}",
-            fontsize=9,
+            fontsize=10,
         )
         ax.grid(alpha=0.20)
 
     axes[-1].set_xlabel("Time (seconds, after training downsampling)")
     fig.tight_layout()
     output_path = output_dir / "cnn1d_gradcam_examples.png"
-    fig.savefig(output_path, dpi=180)
+    fig.savefig(output_path, dpi=300)
     plt.close(fig)
     return output_path
 

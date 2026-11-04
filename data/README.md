@@ -28,5 +28,9 @@ The synthetic data and sample subset are licensed under CC BY 4.0. If you use
 them, attribution to the accompanying article is required; see `DATA_LICENSE`
 and `CITATION.cff`.
 
+The published sample was refreshed in version 1.0.1 after correcting the
+ectopic-coupling and compensatory-pause sequencing in the arrhythmia generator.
+It remains balanced at 200 records per class.
+
 MIT-BIH recordings are not redistributed. The external-validation workflow
 uses WFDB/PhysioNet and records its provenance separately.

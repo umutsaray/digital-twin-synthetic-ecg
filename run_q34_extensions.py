@@ -29,6 +29,17 @@ from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, recall_s
 from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 
+plt.rcParams.update(
+    {
+        "font.size": 10,
+        "axes.titlesize": 11,
+        "axes.labelsize": 10,
+        "xtick.labelsize": 9,
+        "ytick.labelsize": 9,
+        "legend.fontsize": 9,
+    }
+)
+
 from src.explainability import grad_cam_1d
 from src.generate_dataset import CLASS_NAMES
 from src.models import MODEL_REGISTRY, get_model
@@ -176,13 +187,14 @@ def run_calibration(device: torch.device):
         mask = (conf > lo) & (conf <= hi) if lo > 0 else (conf >= lo) & (conf <= hi)
         if mask.any():
             xs.append(conf[mask].mean()); ys.append(correct[mask].mean()); ns.append(mask.sum())
-    fig, ax = plt.subplots(figsize=(6.2, 5.3))
+    fig, ax = plt.subplots(figsize=(4.2, 3.8))
     ax.plot([0, 1], [0, 1], "--", color="#555555", label="Perfect calibration")
     ax.plot(xs, ys, "o-", color="#1f6f8b", linewidth=2, label="1D-CNN")
     for x, yy, n in zip(xs, ys, ns):
-        ax.annotate(str(n), (x, yy), xytext=(4, 5), textcoords="offset points", fontsize=7)
-    ax.set(xlabel="Mean predicted confidence", ylabel="Empirical accuracy", title="1D-CNN reliability diagram", xlim=(0, 1), ylim=(0, 1))
-    ax.grid(alpha=0.25); ax.legend()
+        ax.annotate(str(n), (x, yy), xytext=(3, 4), textcoords="offset points", fontsize=8)
+    ax.set(xlabel="Mean predicted confidence", ylabel="Empirical accuracy", xlim=(0, 1), ylim=(0, 1.08))
+    ax.set_title("1D-CNN reliability diagram", pad=8)
+    ax.grid(alpha=0.25); ax.legend(fontsize=8)
     fig.tight_layout(); fig.savefig(FIGURES / "cnn1d_reliability_diagram.png", dpi=300); plt.close(fig)
     return predictions
 
@@ -225,7 +237,7 @@ def run_uncertainty(device: torch.device, passes: int = 30):
     summary = df.groupby("y_true").agg(n=("y_true", "size"), predictive_entropy_mean=("predictive_entropy", "mean"), predictive_entropy_std=("predictive_entropy", "std"), mutual_information_mean=("mutual_information", "mean"), error_rate=("correct", lambda s: 1-s.mean())).reset_index()
     summary["class_name"] = summary.y_true.map(dict(enumerate(CLASS_NAMES)))
     summary.to_csv(RESULTS / "mc_dropout_uncertainty_by_class.csv", index=False)
-    fig, ax = plt.subplots(figsize=(8.4, 4.8))
+    fig, ax = plt.subplots(figsize=(4.8, 3.6))
     ordered = summary.sort_values("predictive_entropy_mean")
     ax.barh(ordered.class_name.str.replace("_", " "), ordered.predictive_entropy_mean, xerr=ordered.predictive_entropy_std, color="#6B8E9F", alpha=.9)
     ax.set(xlabel="Predictive entropy (mean +/- SD)", title=f"1D-CNN uncertainty by class ({passes} MC-dropout passes)")
@@ -263,7 +275,7 @@ def run_robustness(device: torch.device):
     out.to_csv(RESULTS / "noise_robustness.csv", index=False)
     plot = out.iloc[::-1].copy()
     xlabels = plot.target_snr_db.astype(str)
-    fig, ax = plt.subplots(figsize=(7.4, 4.8))
+    fig, ax = plt.subplots(figsize=(4.8, 3.6))
     ax.plot(xlabels, plot.overall_macro_f1, "o-", label="Overall macro F1", color="#1f6f8b")
     ax.plot(xlabels, plot.normal_recall, "s-", label="Normal-class recall", color="#c55a3d")
     ax.set(xlabel="Injected-noise target SNR (dB)", ylabel="Score", title="1D-CNN robustness to noise on normal-sinus test segments", ylim=(0, 1.02))
@@ -437,9 +449,19 @@ def run_real_data(device: torch.device):
     records = ["100", "101", "103", "105", "106", "109", "118", "119", "200", "203", "207", "208"]
     normal_symbols = {"N", "L", "R", "e", "j"}
     cache_path = REAL_DATA / "mitdb_mapped_10s_segments.npz"
+    cache_provenance_path = REAL_DATA / "mitdb_subset_provenance.csv"
     if cache_path.exists():
         cached = np.load(cache_path)
         x, y = cached["signals"], cached["labels"]
+        if not cache_provenance_path.exists():
+            raise FileNotFoundError(
+                "Cached MIT-BIH segments require data/mitdb_subset/mitdb_subset_provenance.csv. "
+                "Delete the segment cache to rebuild both files from PhysioNet."
+            )
+        prov = pd.read_csv(cache_provenance_path)
+        if len(prov) != len(y):
+            raise ValueError("MIT-BIH cache and provenance contain different numbers of segments.")
+        prov.to_csv(RESULTS / "mitdb_subset_provenance.csv", index=False)
     else:
         rng = np.random.default_rng(SEED)
         segments = []
@@ -478,7 +500,9 @@ def run_real_data(device: torch.device):
         chosen = np.asarray(sorted(chosen))
         x = np.stack([segments[i][0] for i in chosen])
         y = np.asarray([segments[i][1] for i in chosen], dtype=np.int64)
-        prov.iloc[chosen].reset_index(drop=True).to_csv(RESULTS / "mitdb_subset_provenance.csv", index=False)
+        selected_provenance = prov.iloc[chosen].reset_index(drop=True)
+        selected_provenance.to_csv(RESULTS / "mitdb_subset_provenance.csv", index=False)
+        selected_provenance.to_csv(cache_provenance_path, index=False)
         np.savez_compressed(cache_path, signals=x, labels=y)
     model = load_checkpoint("cnn1d", ROOT / "results" / "best_models" / "cnn1d.pt", device)
     probs = []
@@ -493,8 +517,9 @@ def run_real_data(device: torch.device):
     pd.DataFrame(rows).to_csv(RESULTS / "external_real_data_metrics.csv", index=False)
     matrix = confusion_matrix(y, pred, labels=range(6))[:4, :]
     pd.DataFrame(matrix, index=CLASS_NAMES[:4], columns=CLASS_NAMES).to_csv(RESULTS / "external_real_data_confusion_matrix.csv")
-    fig, ax = plt.subplots(figsize=(8.2, 5.5)); im=ax.imshow(matrix, cmap="Blues"); fig.colorbar(im, ax=ax, fraction=.046)
-    ax.set_xticks(range(6), [n.replace("_", "\n") for n in CLASS_NAMES], fontsize=8); ax.set_yticks(range(4), [n.replace("_", "\n") for n in CLASS_NAMES[:4]], fontsize=8)
+    short_names = ["NSR", "Brady", "Tachy", "Arrh.", "Noisy", "Fault"]
+    fig, ax = plt.subplots(figsize=(4.8, 3.8)); im=ax.imshow(matrix, cmap="Blues"); fig.colorbar(im, ax=ax, fraction=.046)
+    ax.set_xticks(range(6), short_names, rotation=35, ha="right", fontsize=8); ax.set_yticks(range(4), short_names[:4], fontsize=8)
     ax.set(xlabel="Synthetic-trained model prediction", ylabel="Mapped MIT-BIH label", title="Zero-shot external sanity check")
     for i in range(4):
         for j in range(6): ax.text(j,i,str(matrix[i,j]),ha="center",va="center",fontsize=8,color="white" if matrix[i,j] > matrix.max()/2 else "black")
