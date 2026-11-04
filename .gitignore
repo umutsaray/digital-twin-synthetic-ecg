@@ -11,3 +11,8 @@ data/synthetic_ecg_dataset.npy
 
 # Local downloads of third-party MIT-BIH data are not redistributed.
 data/mitdb_subset/
+
+# Third-party LUDB clinical recordings are downloaded/extracted locally and
+# are not redistributed. Keep only the repository instructions file.
+data/ludb/*
+!data/ludb/README.md

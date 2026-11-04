@@ -23,6 +23,7 @@ diagnostic system.
 - MIT-BIH zero-shot validation and record-disjoint classifier fine-tuning
 - Zero-shot OOD testing with unseen HR tails and cross-applied artifact profiles
 - Synthetic-versus-MIT-BIH RR-interval distribution comparison
+- Synthetic Gaussian-template versus LUDB manual P/QRS/T timing comparison
 - Numerical tables, figures, predictions, checkpoints, and provenance outputs
 
 ## Dataset
@@ -64,6 +65,20 @@ python scripts/generate_ood_test_set.py
 python scripts/evaluate_ood_generalization.py
 python scripts/compare_rr_distributions.py
 ```
+
+The follow-up P/QRS/T timing analysis uses locally downloaded LUDB 1.0.1
+Lead-II annotations. Raw LUDB clinical data are gitignored; setup instructions
+are in [`data/ludb/README.md`](data/ludb/README.md). Run:
+
+```bash
+python scripts/compare_pqrst_timing.py
+```
+
+The exact mapping, annotation convention, interval definitions, and synthetic
+Gaussian-boundary limitation are documented in
+[`PQRST_TIMING_PROTOCOL.md`](PQRST_TIMING_PROTOCOL.md); results are summarized
+without physiological-equivalence claims in
+[`PQRST_TIMING_RESULTS.md`](PQRST_TIMING_RESULTS.md).
 
 ### Ectopic RR sequencing correction
 

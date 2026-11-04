@@ -24,3 +24,11 @@
 - OOD macro F1: 1D-CNN `0.5398`, LSTM `0.3462`, CNN-LSTM `0.5299`, Transformer `0.5366`, confirming substantial degradation from the in-distribution holdout results.
 - Added pooled synthetic-versus-MIT-BIH RR comparisons. Normal rhythm was practically close (`W=0.021 s`); arrhythmia partially overlapped (`W=0.069 s`); bradycardia (`W=0.257 s`) and tachycardia (`W=0.138 s`) showed clear systematic mismatch.
 - P/QRS/T delineation was not attempted because validated P/T fiducials are unavailable in the MIT-BIH Arrhythmia Database and an unvalidated delineator would add a new error source.
+
+## LUDB P/QRS/T timing analysis (2026-11-04)
+
+- Added a separate comparison against manual Lead-II LUDB annotations, without changing the synthetic generator, checkpoints, OOD results, or prior MIT-BIH RR outputs.
+- Empirically confirmed the LUDB Lead-II convention as `(` → `p`/`N`/`t` → `)` for onset, peak, and offset; auxiliary-note fields were empty.
+- After AF/flutter exclusion and extrasystole precedence, mapped 136 normal-rhythm, 24 bradycardia, 4 tachycardia, and 11 extrasystole/arrhythmia records. Tachycardia is explicitly marked preliminary and underpowered.
+- The generator has Gaussian centers and σ widths but no finite wave boundaries; synthetic boundaries therefore use a declared ±2σ envelope. Normal, bradycardia, and tachycardia share timing parameters, which is reported as a limitation.
+- All six timing intervals differ materially from LUDB in most classes. Arrhythmia PR is closest (`W=0.024 s`), while QRS/QT and fixed P/T template durations show substantial mismatch.
