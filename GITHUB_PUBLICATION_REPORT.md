@@ -17,3 +17,10 @@
 - Re-ran the four-model holdout experiment, five-fold cross-validation, calibration, MC-dropout uncertainty, noise robustness, Grad-CAM fidelity, and MIT-BIH zero-shot/classifier-only adaptation workflows.
 - Headline changes: 1D-CNN synthetic-test macro F1 `0.9900 -> 0.9978`; MIT-BIH zero-shot macro F1 `0.1603 -> 0.1275`; MIT-BIH classifier-only fine-tuned macro F1 `0.3382 -> 0.3006`.
 - Full before/after details are provided in `ECTOPIC_FIX_BEFORE_AFTER.md` and `results/ectopic_fix_before_after_metrics.csv`.
+
+## Reviewer-requested generalization analyses (2026-11-04)
+
+- Added a 600-record, seed-4242 OOD test set with external HR tails and cross-applied artifact profiles; existing checkpoints were evaluated zero-shot without retraining.
+- OOD macro F1: 1D-CNN `0.5398`, LSTM `0.3462`, CNN-LSTM `0.5299`, Transformer `0.5366`, confirming substantial degradation from the in-distribution holdout results.
+- Added pooled synthetic-versus-MIT-BIH RR comparisons. Normal rhythm was practically close (`W=0.021 s`); arrhythmia partially overlapped (`W=0.069 s`); bradycardia (`W=0.257 s`) and tachycardia (`W=0.138 s`) showed clear systematic mismatch.
+- P/QRS/T delineation was not attempted because validated P/T fiducials are unavailable in the MIT-BIH Arrhythmia Database and an unvalidated delineator would add a new error source.

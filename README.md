@@ -21,6 +21,8 @@ diagnostic system.
 - ECE, Brier score, NLL, and MC-dropout uncertainty
 - Noise-injection robustness and classifier-floor diagnostics
 - MIT-BIH zero-shot validation and record-disjoint classifier fine-tuning
+- Zero-shot OOD testing with unseen HR tails and cross-applied artifact profiles
+- Synthetic-versus-MIT-BIH RR-interval distribution comparison
 - Numerical tables, figures, predictions, checkpoints, and provenance outputs
 
 ## Dataset
@@ -40,6 +42,28 @@ sample and the complete deterministic generator. Run the generator to recreate
 the full dataset locally. No Zenodo or other external archive is used.
 
 See [`data/README.md`](data/README.md) for exact files and licensing details.
+
+## Reviewer-requested generalization analyses
+
+The repository includes two additional analyses that do not retrain the four
+publication classifiers:
+
+- [`OOD_GENERALIZATION_PROTOCOL.md`](OOD_GENERALIZATION_PROTOCOL.md) defines a
+  600-record OOD test set using external heart-rate tails and cross-applied
+  acquisition-artifact profiles. Results and an honest interpretation are in
+  [`OOD_GENERALIZATION_RESULTS.md`](OOD_GENERALIZATION_RESULTS.md).
+- [`RR_DISTRIBUTION_COMPARISON_RESULTS.md`](RR_DISTRIBUTION_COMPARISON_RESULTS.md)
+  compares pooled RR intervals from the synthetic rhythm classes with the same
+  mapped MIT-BIH subset used for external validation. P/QRS/T delineation is
+  explicitly outside the scope of this comparison.
+
+Reproduce them with:
+
+```bash
+python scripts/generate_ood_test_set.py
+python scripts/evaluate_ood_generalization.py
+python scripts/compare_rr_distributions.py
+```
 
 ### Ectopic RR sequencing correction
 
